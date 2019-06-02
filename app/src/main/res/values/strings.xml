@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">Quotsi</string>
+    <string name="quote">This is a sample quote. Please stand by for further updates.</string>
+    <string name="noConnection">Can\'t connect. Please check your internet connection.</string>
+</resources>

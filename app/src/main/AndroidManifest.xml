@@ -5,7 +5,7 @@
 			
 	<application
 		android:usesCleartextTraffic="true"
-		android:allowBackup="true"
+		android:allowBackup="false"
 		android:icon="@mipmap/ic_launcher"
 		android:label="@string/app_name"
 		android:roundIcon="@mipmap/ic_launcher_round"
@@ -14,12 +14,13 @@
 		<activity android:name=".MainActivity">
 			<intent-filter>
 				<action android:name="android.intent.action.MAIN" />
+				<action android:name="android.intent.action.VIEW" />
 
 				<category android:name="android.intent.category.LAUNCHER" />
 			</intent-filter>
 		</activity>
 		<receiver android:name="com.watsnav.quotsi.widgets.QuotsiWidgetProvider"
-			android:icon="@drawable/rounds_glitter"
+			android:icon="@drawable/tvw_btn"
 			android:label="@string/app_name">
 			<intent-filter>
 				<action android:name="android.appwidget.action.APPWIDGET_UPDATE"/>
