@@ -12,20 +12,23 @@
         android:id="@+id/tvquote_widget"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@android:drawable/dialog_holo_dark_frame"
-        android:fadingEdge="horizontal"
+        android:background="@drawable/layout_bg"
+        android:fadingEdge="horizontal|none"
         android:fontFamily="@font/monaco"
+        android:padding="10dp"
         android:textAlignment="center"
+        android:textAppearance="@android:style/TextAppearance.Holo"
         android:textColor="@android:color/holo_blue_bright" />
 
     <ImageButton
         android:id="@+id/ibtn_widget"
-        android:layout_width="137dp"
-        android:layout_height="94dp"
-        android:background="@drawable/tvw_btn"
+        android:layout_width="128dp"
+        android:layout_height="96dp"
+        android:background="@drawable/layout_bg"
         android:clickable="true"
         android:contentDescription="@string/app_name"
         android:focusable="true"
-        android:scaleType="center" />
+        android:scaleType="center"
+        android:src="@drawable/ic_new_small_b" />
 
 </LinearLayout>
