@@ -6,22 +6,11 @@ import android.appwidget.AppWidgetProvider;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ComponentName;
-import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
-import android.os.AsyncTask;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.widget.*;
-import android.view.*;
+
 
 import com.watsnav.quotsi.utils.FetchRandomQuoteTask;
 import com.watsnav.quotsi.R;
-import com.watsnav.quotsi.utils.NetUtils;
-import org.json.JSONObject;
-import org.json.JSONException;
-import java.net.URL;
-import java.net.MalformedURLException;
-import java.io.IOException;
 
 
 public class QuotsiWidgetProvider extends AppWidgetProvider {
@@ -39,9 +28,6 @@ public class QuotsiWidgetProvider extends AppWidgetProvider {
 			RemoteViews rviews = new RemoteViews(ctx.getPackageName(), R.layout.quotsi_widget);
 			rviews.setOnClickPendingIntent(R.id.ibtn_widget, pIntent);
 			new FetchRandomQuoteTask(rviews, awm, widgetId).execute();
-			//rviews.setTextViewText(R.id.tvquote_widget, R.id.tvquote)
-
-			//awm.updateAppWidget(widgetId, rviews);
 		}
 	}
 }

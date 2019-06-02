@@ -1,17 +1,11 @@
 package com.watsnav.quotsi.utils;
 
-import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
-import android.appwidget.AppWidgetProvider;
 import android.content.Context;
-import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.os.AsyncTask;
 import android.widget.*;
-import android.view.*;
 
-import com.watsnav.quotsi.utils.NetUtils;
 import com.watsnav.quotsi.R;
 
 import org.json.JSONObject;
