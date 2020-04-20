@@ -22,8 +22,8 @@
 
     <ImageButton
         android:id="@+id/ibtn_widget"
-        android:layout_width="128dp"
-        android:layout_height="96dp"
+        android:layout_width="119dp"
+        android:layout_height="wrap_content"
         android:background="@drawable/layout_bg"
         android:clickable="true"
         android:contentDescription="@string/app_name"

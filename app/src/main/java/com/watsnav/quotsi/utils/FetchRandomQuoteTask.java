@@ -24,7 +24,7 @@ public class FetchRandomQuoteTask extends AsyncTask<Void, Void, String> {
 	int wid;
 
 	//private final String base_url = "http://genelios.private/random.php";
-	private final String base_url = "http://www.watsnav.site";
+	private final String base_url = "https://watsnav.github.io/quotsi";
 	public FetchRandomQuoteTask(Context ctx) {
 		ctxref = new WeakReference<>(ctx);
 	}
