@@ -4,6 +4,7 @@ import android.Manifest;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.os.AsyncTask;
+import android.os.Handler;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -15,6 +16,7 @@ import android.view.*;
 import android.view.animation.Animation;
 
 import com.watsnav.quotsi.utils.FetchQuoteTask;
+import com.watsnav.quotsi.utils.NetUtils;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -26,9 +28,15 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.lang.ref.WeakReference;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Random;
+import java.util.concurrent.CompletableFuture;
+
+import static com.watsnav.quotsi.utils.NetUtils.getHttpResponse;
 
 public class MainActivity extends AppCompatActivity {
     private TextView tv;
@@ -49,7 +57,14 @@ public class MainActivity extends AppCompatActivity {
         tv = findViewById(R.id.tvquote);
         tvauth = findViewById(R.id.tvauthor);
         ibtn = findViewById(R.id.ibtn);
-        setFetchedQuote();
+
+
+        Handler handler = new Handler();
+        //CompletableFuture<String> fetchedQuote = fetchQuote(this).thenApply(this::onJsonResponse);
+        CompletableFuture<String> fetchedQuote = fetchQuote(handler);
+
+
+        //setFetchedQuote();
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED &&
                 ContextCompat.checkSelfPermission(ctx, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
@@ -65,6 +80,28 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
+
+    public void onJsonResponse(Handler handler, String json) {
+        if (json == null) return;
+        //parse JSON and update tv
+        try {
+            JSONObject jsonObj = new JSONObject(json);
+            String newQuote = jsonObj.getString("quote");
+            String newAuthor = jsonObj.getString("name");
+            handler.post(new Runnable() {
+                @Override
+                public void run() {
+                    tv.setText(newQuote);
+                    tvauth.setText(newAuthor);
+                    cacheLatestQuote();
+                }
+            });
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+    //}
+
 
     @Override
     public void onRequestPermissionsResult(int req, String[] perms, int[] res) {
@@ -114,7 +151,7 @@ public class MainActivity extends AppCompatActivity {
             if (!dir.exists()) {
                 dir.mkdir();
             }
-            if(tv.getText().length() >= 1) {
+            if (tv.getText().length() >= 1) {
                 String latestQuote = "{\"quote\":\"" + tv.getText() + "\",\"name\":\"" + tvauth.getText() + "\"}";
                 if (hash.contains(latestQuote)) {
                     return;
@@ -136,8 +173,7 @@ public class MainActivity extends AppCompatActivity {
                     writer.flush();
                     writer.close();
                 }
-            }
-            else return;
+            } else return;
         } catch (IOException e) {
             Log.e("cacheLatestQuote", "IOException");
             e.printStackTrace();
@@ -149,7 +185,7 @@ public class MainActivity extends AppCompatActivity {
             Random rand = new Random();
             int random = rand.nextInt(hash.size());
             int i = 0;
-            for(String tmpStr : hash) {
+            for (String tmpStr : hash) {
                 if (i == random) {
                     //String tmpStr = it.next().toString();
                     JSONObject jsonObj = new JSONObject(tmpStr);
@@ -171,8 +207,29 @@ public class MainActivity extends AppCompatActivity {
         Context ctx = this;
         FetchQuoteTask fetchTask = new FetchQuoteTask(ctx);
         fetchTask.execute();
-        while(fetchTask.getStatus()!=AsyncTask.Status.FINISHED);
-        cacheLatestQuote();
+    }
+
+    public CompletableFuture<String> fetchQuote(Handler handler) {
+        WeakReference<Context> ctxRef = new WeakReference<>(ctx);
+        CompletableFuture<String> result = CompletableFuture.supplyAsync(() -> {
+            try {
+                String base_url = "https://watsnav.github.io/quotsi";
+                URL url = new URL(base_url);
+                try {
+                    String json = NetUtils.getHttpResponse(url);
+                    onJsonResponse(handler, json);
+                    return json;
+                } catch (IOException ie) {
+                    ie.printStackTrace();
+                    return null;
+                }
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+                return null;
+            }
+        });
+
+        return result;
     }
 
 }
