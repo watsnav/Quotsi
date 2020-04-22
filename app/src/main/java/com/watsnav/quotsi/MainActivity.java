@@ -60,9 +60,7 @@ public class MainActivity extends AppCompatActivity {
 
 
         Handler handler = new Handler();
-        //CompletableFuture<String> fetchedQuote = fetchQuote(this).thenApply(this::onJsonResponse);
         CompletableFuture<String> fetchedQuote = fetchQuote(handler);
-
 
         //setFetchedQuote();
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED &&
@@ -100,7 +98,7 @@ public class MainActivity extends AppCompatActivity {
             e.printStackTrace();
         }
     }
-    //}
+
 
 
     @Override
@@ -210,7 +208,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public CompletableFuture<String> fetchQuote(Handler handler) {
-        WeakReference<Context> ctxRef = new WeakReference<>(ctx);
         CompletableFuture<String> result = CompletableFuture.supplyAsync(() -> {
             try {
                 String base_url = "https://watsnav.github.io/quotsi";
