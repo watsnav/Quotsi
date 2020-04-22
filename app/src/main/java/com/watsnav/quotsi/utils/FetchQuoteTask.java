@@ -2,6 +2,7 @@ package com.watsnav.quotsi.utils;
 
 import android.appwidget.AppWidgetManager;
 import android.content.Context;
+import android.content.res.AssetManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.AsyncTask;
 import android.widget.*;
@@ -10,25 +11,27 @@ import com.watsnav.quotsi.R;
 
 import org.json.JSONObject;
 import org.json.JSONException;
+
+import java.io.File;
+import java.io.InputStream;
 import java.net.URL;
 import java.net.MalformedURLException;
 import java.io.IOException;
 import java.lang.ref.WeakReference;
 
 
-
-public class FetchRandomQuoteTask extends AsyncTask<Void, Void, String> {
+public class FetchQuoteTask extends AsyncTask<Void, Void, String> {
 	private WeakReference<Context> ctxref = null;
 	private RemoteViews rviews = null;
 	private AppWidgetManager awm;
-	int wid;
+	private int wid;
 
 	//private final String base_url = "http://genelios.private/random.php";
 	private final String base_url = "https://watsnav.github.io/quotsi";
-	public FetchRandomQuoteTask(Context ctx) {
+	public FetchQuoteTask(Context ctx) {
 		ctxref = new WeakReference<>(ctx);
 	}
-	public FetchRandomQuoteTask(RemoteViews rv, AppWidgetManager awm, int wid) {
+	public FetchQuoteTask(RemoteViews rv, AppWidgetManager awm, int wid) {
 		rviews = rv;
 		this.awm = awm;
 		this.wid = wid;

@@ -9,7 +9,7 @@ import android.content.ComponentName;
 import android.widget.*;
 
 
-import com.watsnav.quotsi.utils.FetchRandomQuoteTask;
+import com.watsnav.quotsi.utils.FetchQuoteTask;
 import com.watsnav.quotsi.R;
 
 
@@ -27,7 +27,7 @@ public class QuotsiWidgetProvider extends AppWidgetProvider {
 			PendingIntent pIntent = PendingIntent.getBroadcast(ctx,0,intent,PendingIntent.FLAG_UPDATE_CURRENT);
 			RemoteViews rviews = new RemoteViews(ctx.getPackageName(), R.layout.quotsi_widget);
 			rviews.setOnClickPendingIntent(R.id.ibtn_widget, pIntent);
-			new FetchRandomQuoteTask(rviews, awm, widgetId).execute();
+			new FetchQuoteTask(rviews, awm, widgetId).execute();
 		}
 	}
 }
